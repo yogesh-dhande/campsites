@@ -3,6 +3,8 @@ const axios = require('axios')
 const cors = require('cors')({ origin: 'http://localhost:3000' })
 
 function getDatesFromRange(start, end) {
+  console.log(start, end)
+  end = new Date(end)
   for (
     var arr = [], dt = new Date(start);
     dt <= end;
@@ -17,8 +19,6 @@ function getMonthsFromDates(dates) {
   const months = [
     ...new Set(dates.map((date) => date.toISOString().slice(0, 7))),
   ].map((month) => new Date(month).toISOString().split('T')[0])
-
-  console.log(months)
   return months
 }
 
@@ -98,12 +98,11 @@ async function addCampsiteDetails(campsite) {
 exports.findCampsites = functions.https.onRequest(async (req, res) => {
   return cors(req, res, async () => {
     try {
-      const dates = getDatesFromRange(
-        new Date(req.query.startDate),
-        new Date(req.query.endDate)
-      )
+      const dateRange = JSON.parse(req.query.dateRange)
+      const dates = getDatesFromRange(dateRange.startDate, dateRange.endDate)
+      console.log(dates)
       const months = getMonthsFromDates(dates)
-
+      console.log(months)
       const facilities = await getFacilititesFromQuery(req.query.query)
 
       let arrayOfSites = await Promise.all(

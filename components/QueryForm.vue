@@ -1,20 +1,20 @@
 <template>
   <div class="bg-gray-900 p-12 opacity-90 text-2xl text-white font-bold">
-    <div class="flex flex-col space-y-8 max-width-xl">
+    <div class="flex flex-col space-y-8 max-width-sm">
       <div class="flex space-x-8">
         <div>
-          <label for="zipcode" class="block p-1">Keyword Search</label>
+          <label for="keywords" class="block p-1">Keyword Search</label>
           <div class="mt-1">
             <input
-              id="zipcode"
+              id="keywords"
               v-model="query"
               type="text"
-              name="zipcode"
+              name="keywords"
               class="
+                w-full
                 shadow-sm
                 focus:ring-indigo-500
                 focus:border-indigo-500
-                block
                 rounded-md
                 bg-gray-800
                 p-1
@@ -22,31 +22,7 @@
             />
           </div>
         </div>
-        <!-- <div>
-          <label for="radius" class="block p-1 text-2xl font-bold">
-            Radius (miles)
-          </label>
-          <div class="mt-1">
-            <input
-              id="radius"
-              v-model="radius"
-              type="text"
-              name="radius"
-              class="
-                shadow-sm
-                focus:ring-indigo-500
-                focus:border-indigo-500
-                w-full
-                text-2xl
-                rounded-md
-                bg-gray-800
-                p-1
-              "
-            />
-          </div>
-        </div> -->
       </div>
-      <month-picker></month-picker>
       <div class="opacity-100">
         <button
           type="submit"
@@ -75,19 +51,19 @@
 </template>
 
 <script>
-import MonthPicker from '@/components/MonthPicker.vue'
-
 export default {
   name: 'QueryForm',
-  components: {
-    MonthPicker,
-  },
   data() {
+    const today = new Date()
     return {
       query: 'yosemite',
       radius: '50',
-      startDate: new Date(2021, 7, 3),
-      endDate: new Date(2021, 7, 5),
+      dateRange: {
+        startDate: '2021-08-03',
+        endDate: '2021-08-05',
+      },
+      minDate: today,
+      maxDate: new Date(today.getFullYear() + 1, today.getMonth()),
     }
   },
   methods: {
@@ -96,8 +72,7 @@ export default {
       this.$store.dispatch('findCampsites', {
         query: this.query,
         radius: this.radius,
-        startDate: this.startDate,
-        endDate: this.endDate,
+        dateRange: this.dateRange,
       })
     },
   },
