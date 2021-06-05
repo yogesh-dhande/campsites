@@ -1,0 +1,105 @@
+<template>
+  <div class="bg-gray-900 p-12 opacity-90 text-2xl text-white font-bold">
+    <div class="flex flex-col space-y-8 max-width-xl">
+      <div class="flex space-x-8">
+        <div>
+          <label for="zipcode" class="block p-1">Keyword Search</label>
+          <div class="mt-1">
+            <input
+              id="zipcode"
+              v-model="query"
+              type="text"
+              name="zipcode"
+              class="
+                shadow-sm
+                focus:ring-indigo-500
+                focus:border-indigo-500
+                block
+                rounded-md
+                bg-gray-800
+                p-1
+              "
+            />
+          </div>
+        </div>
+        <!-- <div>
+          <label for="radius" class="block p-1 text-2xl font-bold">
+            Radius (miles)
+          </label>
+          <div class="mt-1">
+            <input
+              id="radius"
+              v-model="radius"
+              type="text"
+              name="radius"
+              class="
+                shadow-sm
+                focus:ring-indigo-500
+                focus:border-indigo-500
+                w-full
+                text-2xl
+                rounded-md
+                bg-gray-800
+                p-1
+              "
+            />
+          </div>
+        </div> -->
+      </div>
+      <month-picker></month-picker>
+      <div class="opacity-100">
+        <button
+          type="submit"
+          class="
+            block
+            py-2
+            px-4
+            mx-auto
+            w-full
+            border border-transparent
+            shadow-sm
+            font-bold
+            rounded-md
+            bg-pink-600
+            hover:bg-pink-700
+            focus:outline-none
+            focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500
+          "
+          @click="findCampsites"
+        >
+          Find Campsites
+        </button>
+      </div>
+    </div>
+  </div>
+</template>
+
+<script>
+import MonthPicker from '@/components/MonthPicker.vue'
+
+export default {
+  name: 'QueryForm',
+  components: {
+    MonthPicker,
+  },
+  data() {
+    return {
+      query: 'yosemite',
+      radius: '50',
+      startDate: new Date(2021, 7, 3),
+      endDate: new Date(2021, 7, 5),
+    }
+  },
+  methods: {
+    findCampsites() {
+      console.log('finding campsites ...')
+      this.$store.dispatch('findCampsites', {
+        query: this.query,
+        radius: this.radius,
+        startDate: this.startDate,
+        endDate: this.endDate,
+      })
+    },
+  },
+}
+</script>
