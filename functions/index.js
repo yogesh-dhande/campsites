@@ -15,10 +15,14 @@ function getDatesFromRange(start, end) {
   return arr
 }
 
+function getKeyFromDate(date) {
+  return new Date(date).toISOString().split('T')[0]
+}
+
 function getMonthsFromDates(dates) {
   const months = [
     ...new Set(dates.map((date) => date.toISOString().slice(0, 7))),
-  ].map((month) => new Date(month).toISOString().split('T')[0])
+  ].map((month) => getKeyFromDate(month))
   return months
 }
 
@@ -55,6 +59,14 @@ async function getSiteAvailabilityAtFacility(facility, months) {
       const response = await axios.get(
         `https://www.recreation.gov/api/camps/availability/campground/${facility.FacilityID}/month?start_date=${month}T00%3A00%3A00.000Z`
       )
+
+      Object.values(response.data.campsites).forEach((site) => {
+        const availabilities = {}
+        Object.keys(site.availabilities).forEach((date) => {
+          availabilities[getKeyFromDate(date)] = site.availabilities[date]
+        })
+        site.availabilities = availabilities
+      })
       if (!sites.length) {
         sites = response.data.campsites
       } else {
@@ -72,8 +84,13 @@ async function getSiteAvailabilityAtFacility(facility, months) {
   }
 }
 
-async function isSiteAvailableOnDates(site, dates) {
-  return true
+function isSiteAvailableOnDates(site, dates) {
+  const available = dates
+    .map((date) => site.availabilities[getKeyFromDate(date)] === 'Available')
+    .every(Boolean)
+
+  console.log(available)
+  return available
 }
 
 async function addCampsiteDetails(campsite) {
@@ -115,8 +132,8 @@ exports.findCampsites = functions.https.onRequest(async (req, res) => {
 
       console.log(sites.length)
 
-      const availableSites = sites.filter(
-        async (site) => await isSiteAvailableOnDates(site, dates)
+      const availableSites = sites.filter((site) =>
+        isSiteAvailableOnDates(site, dates)
       )
       console.log(availableSites.length)
       await Promise.all(availableSites.map((site) => addCampsiteDetails(site)))

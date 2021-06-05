@@ -59,8 +59,8 @@ export default {
       query: 'yosemite',
       radius: '50',
       dateRange: {
-        startDate: '2021-08-03',
-        endDate: '2021-08-05',
+        startDate: '2021-08-09',
+        endDate: '2021-08-11',
       },
       minDate: today,
       maxDate: new Date(today.getFullYear() + 1, today.getMonth()),
