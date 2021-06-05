@@ -48,17 +48,6 @@ async function getFacilititesFromQuery(query) {
   }
 }
 
-async function getCampsiteAvailability(facility, month) {
-  try {
-    const response = await axios.get(
-      `https://www.recreation.gov/api/camps/availability/campground/${facility.FacilityID}/month?start_date=${month}T00%3A00%3A00.000Z`
-    )
-    return response.data.campsites
-  } catch (error) {
-    console.log(error)
-  }
-}
-
 async function getSiteAvailabilityAtFacility(facility, months) {
   let sites = {}
   try {
