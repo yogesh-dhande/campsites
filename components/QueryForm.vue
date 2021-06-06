@@ -1,15 +1,16 @@
 <template>
   <card class="bg-gray-900 p-3 opacity-90 text-xl text-white font-bold">
-    <div class="flex flex-col space-y-8">
+    <div class="flex space-x-4 items-center">
       <div class="flex space-x-8">
         <div>
-          <label for="keywords" class="block p-1">Keyword Search</label>
+          <!-- <label for="keywords" class="block p-1">Keywords</label> -->
           <div class="mt-1">
             <input
               id="keywords"
               v-model="query"
               type="text"
               name="keywords"
+              placeholder="Keywords"
               class="
                 w-full
                 shadow-sm
@@ -17,7 +18,8 @@
                 focus:border-indigo-500
                 rounded-md
                 bg-gray-800
-                p-1
+                py-2
+                px-4
               "
             />
           </div>
