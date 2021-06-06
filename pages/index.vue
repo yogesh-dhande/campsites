@@ -18,11 +18,23 @@
         </h1>
       </div>
       <query-form></query-form>
-      <campsite class="mt-6" />
+      <div class="mt-6">
+        <campsite
+          v-for="site in availableSites"
+          :key="site.campsite_id"
+          :campsite="site"
+          class="mt-2"
+        />
+      </div>
     </div>
   </div>
 </template>
 
 <script>
-export default {}
+import { mapGetters } from 'vuex'
+export default {
+  computed: {
+    ...mapGetters(['availableSites']),
+  },
+}
 </script>

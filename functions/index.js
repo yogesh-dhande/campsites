@@ -2,30 +2,6 @@ const functions = require('firebase-functions')
 const axios = require('axios')
 const cors = require('cors')({ origin: 'http://localhost:3000' })
 
-function getDatesFromRange(start, end) {
-  console.log(start, end)
-  end = new Date(end)
-  for (
-    var arr = [], dt = new Date(start);
-    dt <= end;
-    dt.setDate(dt.getDate() + 1)
-  ) {
-    arr.push(new Date(dt))
-  }
-  return arr
-}
-
-function getKeyFromDate(date) {
-  return new Date(date).toISOString().split('T')[0]
-}
-
-function getMonthsFromDates(dates) {
-  const months = [
-    ...new Set(dates.map((date) => date.toISOString().slice(0, 7))),
-  ].map((month) => getKeyFromDate(month))
-  return months
-}
-
 async function getFacilititesFromQuery(query) {
   try {
     const response = await axios.get(
@@ -59,13 +35,9 @@ async function getSiteAvailabilityAtFacility(facility, months) {
       const response = await axios.get(
         `https://www.recreation.gov/api/camps/availability/campground/${facility.FacilityID}/month?start_date=${month}T00%3A00%3A00.000Z`
       )
-
       Object.values(response.data.campsites).forEach((site) => {
-        const availabilities = {}
-        Object.keys(site.availabilities).forEach((date) => {
-          availabilities[getKeyFromDate(date)] = site.availabilities[date]
-        })
-        site.availabilities = availabilities
+        site.FacilityID = facility.FacilityID
+        site.FacilityName = facility.FacilityName
       })
       if (!sites.length) {
         sites = response.data.campsites
@@ -82,15 +54,6 @@ async function getSiteAvailabilityAtFacility(facility, months) {
   } catch (error) {
     console.log(error)
   }
-}
-
-function isSiteAvailableOnDates(site, dates) {
-  const available = dates
-    .map((date) => site.availabilities[getKeyFromDate(date)] === 'Available')
-    .every(Boolean)
-
-  console.log(available)
-  return available
 }
 
 async function addCampsiteDetails(campsite) {
@@ -115,32 +78,23 @@ async function addCampsiteDetails(campsite) {
 exports.findCampsites = functions.https.onRequest(async (req, res) => {
   return cors(req, res, async () => {
     try {
-      const dateRange = JSON.parse(req.query.dateRange)
-      const dates = getDatesFromRange(dateRange.startDate, dateRange.endDate)
-      console.log(dates)
-      const months = getMonthsFromDates(dates)
-      console.log(months)
       const facilities = await getFacilititesFromQuery(req.query.query)
 
       let arrayOfSites = await Promise.all(
         facilities.map(
           async (facility) =>
-            await getSiteAvailabilityAtFacility(facility, months)
+            await getSiteAvailabilityAtFacility(facility, req.query.months)
         )
       )
       const sites = arrayOfSites.flat()
 
       console.log(sites.length)
 
-      const availableSites = sites.filter((site) =>
-        isSiteAvailableOnDates(site, dates)
-      )
-      console.log(availableSites.length)
-      await Promise.all(availableSites.map((site) => addCampsiteDetails(site)))
+      //   await Promise.all(sites.map((site) => addCampsiteDetails(site)))
 
       res.send({
         campgrounds: facilities,
-        campsites: availableSites,
+        campsites: sites,
       })
     } catch (error) {
       console.log(error.message)
