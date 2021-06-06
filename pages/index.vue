@@ -18,6 +18,7 @@
         </h1>
       </div>
       <query-form></query-form>
+      <campsite class="mt-6" />
     </div>
   </div>
 </template>

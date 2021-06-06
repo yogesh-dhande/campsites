@@ -1,6 +1,6 @@
 <template>
-  <div class="bg-gray-900 p-12 opacity-90 text-2xl text-white font-bold">
-    <div class="flex flex-col space-y-8 max-width-sm">
+  <card class="bg-gray-900 p-3 opacity-90 text-xl text-white font-bold">
+    <div class="flex flex-col space-y-8">
       <div class="flex space-x-8">
         <div>
           <label for="keywords" class="block p-1">Keyword Search</label>
@@ -23,6 +23,12 @@
           </div>
         </div>
       </div>
+      <selector
+        id="state"
+        name="state"
+        :options="states"
+        :value="CA"
+      ></selector>
       <div class="opacity-100">
         <button
           type="submit"
@@ -47,23 +53,26 @@
         </button>
       </div>
     </div>
-  </div>
+  </card>
 </template>
 
 <script>
+import states from '@/static/data'
+
 export default {
   name: 'QueryForm',
+  components: {},
   data() {
     const today = new Date()
     return {
-      query: 'yosemite',
-      radius: '50',
+      query: 'arroyo',
       dateRange: {
         startDate: '2021-08-09',
         endDate: '2021-08-11',
       },
       minDate: today,
       maxDate: new Date(today.getFullYear() + 1, today.getMonth()),
+      states,
     }
   },
   methods: {
@@ -71,7 +80,6 @@ export default {
       console.log('finding campsites ...')
       this.$store.dispatch('findCampsites', {
         query: this.query,
-        radius: this.radius,
         dateRange: this.dateRange,
       })
     },

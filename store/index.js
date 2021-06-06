@@ -35,6 +35,6 @@ export const mutations = {
     state.campsites = campsites
   },
   SET_CAMPGROUNDS(state, campgrounds) {
-    state.campsites = campgrounds
+    state.campgrounds = campgrounds
   },
 }
