@@ -84,7 +84,6 @@ export const actions = {
       payload.dateRange.startDate,
       payload.dateRange.endDate
     )
-    commit('SET_DATES', dates)
 
     const queryParams = {
       query: payload.query,
@@ -109,9 +108,9 @@ export const actions = {
         })
         site.availabilities = availabilities
       })
-
       commit('SET_CAMPSITES', res.data.campsites)
       commit('SET_CAMPGROUNDS', res.data.campgrounds)
+      commit('SET_DATES', dates)
     }
   },
 }

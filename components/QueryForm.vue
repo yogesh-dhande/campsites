@@ -62,7 +62,9 @@
           />
         </div>
       </div>
-      <div class="flex flex-col sm:flex-row">
+      <div
+        class="flex flex-col space-y-2 sm:flex-row sm:spaxe-x-4 sm:space-y-0"
+      >
         <div>
           <label for="startDate" class="block p-1">Start</label>
           <input
@@ -102,7 +104,7 @@
             shadow-sm
             font-bold
             rounded-md
-            bg-pink-600
+            bg-pink-600 bg-opacity-75
             hover:bg-pink-700
             focus:outline-none
             focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500

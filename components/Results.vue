@@ -1,12 +1,15 @@
 <template>
   <div>
     <campsites-found
+      v-if="dates.length > 0"
       :available-sites="availableSites"
       :available-campgrounds="availableCampgrounds"
       :campgrounds="campgrounds"
     />
-    <div class="flex flex-col lg:flex-row lg:space-x-4 mt-6">
-      <div class="flex flex-col min-w-min space-y-2">
+    <div
+      class="flex flex-col space-y-2 lg:flex-row lg:space-x-4 lg:space-y-0 mt-6"
+    >
+      <div class="flex flex-col space-y-2">
         <filter-menu
           v-if="campgrounds.length"
           v-model="selectedCampgrounds"
@@ -40,6 +43,10 @@ export default {
       default: () => [],
     },
     campgrounds: {
+      type: Array,
+      default: () => [],
+    },
+    dates: {
       type: Array,
       default: () => [],
     },
