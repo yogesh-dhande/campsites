@@ -1,5 +1,5 @@
 <template>
-  <card class="mt-3 bg-indigo-600 bg-opacity-50">
+  <card class="bg-indigo-600 bg-opacity-50">
     <h2 class="text-white font-bold">
       Found {{ campgrounds.length }} camgrounds.
       {{ availableCampgrounds.length }} of them have a total of
@@ -9,15 +9,24 @@
 </template>
 
 <script>
-import { mapState, mapGetters } from 'vuex'
 import Card from '@/components/Card.vue'
 export default {
   components: {
     Card,
   },
-  computed: {
-    ...mapGetters(['availableSites', 'availableCampgrounds']),
-    ...mapState(['campgrounds']),
+  props: {
+    availableSites: {
+      type: Array,
+      default: () => [],
+    },
+    availableCampgrounds: {
+      type: Array,
+      default: () => [],
+    },
+    campgrounds: {
+      type: Array,
+      default: () => [],
+    },
   },
 }
 </script>

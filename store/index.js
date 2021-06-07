@@ -52,6 +52,8 @@ function isSiteAvailableOnDates(site, dates) {
 }
 
 export const state = () => ({
+  queryParams: {},
+  dates: [],
   campsites: [],
   campgrounds: [],
 })
@@ -73,23 +75,28 @@ export const getters = {
 }
 
 export const actions = {
-  async findCampsites({ state, commit }, payload) {
+  async findCampsites({ commit }, payload) {
     const dates = getDatesFromRange(
       payload.dateRange.startDate,
       payload.dateRange.endDate
     )
     commit('SET_DATES', dates)
 
-    payload.months = getMonthsFromDates(dates)
+    const queryParams = {
+      query: payload.query,
+      months: getMonthsFromDates(dates),
+    }
+
     const res = await axios.get(
       'http://localhost:9001/campsites-c0b4b/us-central1/findCampsites',
       {
-        params: {
-          ...payload,
-        },
+        params: queryParams,
       }
     )
     console.log(res.data)
+
+    commit('SET_QUERY_PARAMS', queryParams)
+
     Object.values(res.data.campsites).forEach((site) => {
       const availabilities = {}
       Object.keys(site.availabilities).forEach((date) => {
@@ -104,6 +111,9 @@ export const actions = {
 }
 
 export const mutations = {
+  SET_QUERY_PARAMS(state, query) {
+    state.queryParams = query
+  },
   SET_DATES(state, dates) {
     state.dates = dates
   },

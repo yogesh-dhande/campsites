@@ -18,26 +18,40 @@
         </h1>
       </div>
       <query-form></query-form>
-      <campsites-found />
-      <div class="mt-6">
-        <campsite
-          v-for="site in availableSites"
-          :key="site.campsite_id"
-          :campsite="site"
-          class="mt-2"
-        />
-      </div>
+      <results
+        class="mx-6 sm:mx-12"
+        :available-sites="availableSites"
+        :available-campgrounds="availableCampgrounds"
+        :campgrounds="campgrounds"
+      />
     </div>
   </div>
 </template>
 
 <script>
-import { mapGetters } from 'vuex'
-import CampsitesFound from '~/components/CampsitesFound.vue'
+import { mapGetters, mapState } from 'vuex'
+import Results from '~/components/Results.vue'
 export default {
-  components: { CampsitesFound },
+  components: { Results },
   computed: {
-    ...mapGetters(['availableSites']),
+    ...mapState(['campgrounds']),
+    ...mapGetters(['availableSites', 'availableCampgrounds']),
+    campgrounds() {
+      return this.availableCampgrounds.map((ground) =>
+        this.toTitleCase(ground.FacilityName)
+      )
+    },
+  },
+  methods: {
+    toTitleCase(str) {
+      try {
+        return str.replace(/\w\S*/g, function (txt) {
+          return txt.charAt(0).toUpperCase() + txt.substr(1).toLowerCase()
+        })
+      } catch (error) {
+        return ''
+      }
+    },
   },
 }
 </script>
