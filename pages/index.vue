@@ -18,6 +18,7 @@
         </h1>
       </div>
       <query-form></query-form>
+      <campsites-found />
       <div class="mt-6">
         <campsite
           v-for="site in availableSites"
@@ -32,7 +33,9 @@
 
 <script>
 import { mapGetters } from 'vuex'
+import CampsitesFound from '~/components/CampsitesFound.vue'
 export default {
+  components: { CampsitesFound },
   computed: {
     ...mapGetters(['availableSites']),
   },
