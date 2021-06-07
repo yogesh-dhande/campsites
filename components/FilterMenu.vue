@@ -50,7 +50,9 @@
                 class="m-2"
                 @change="handleInput"
               />
-              <label :for="entry" class="font-medium">{{ entry.text }}</label>
+              <label :for="entry.value" class="font-medium">{{
+                entry.text
+              }}</label>
             </div>
           </li>
         </ul>

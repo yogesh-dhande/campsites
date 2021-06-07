@@ -4,11 +4,15 @@ function getDatesFromRange(start, end) {
   console.log(start, end)
   end = new Date(end)
   const dates = []
-  const current = new Date(start)
+  let current = new Date(start)
   // eslint-disable-next-line no-unmodified-loop-condition
   while (current <= end) {
     dates.push(current)
-    current.setDate(current.getDate() + 1)
+    current = new Date(
+      current.getFullYear(),
+      current.getMonth(),
+      current.getDate() + 1
+    )
   }
   return dates
 }
@@ -75,7 +79,7 @@ export const getters = {
 }
 
 export const actions = {
-  async findCampsites({ commit }, payload) {
+  async findCampsites({ state, commit }, payload) {
     const dates = getDatesFromRange(
       payload.dateRange.startDate,
       payload.dateRange.endDate
@@ -87,26 +91,28 @@ export const actions = {
       months: getMonthsFromDates(dates),
     }
 
-    const res = await axios.get(
-      'http://localhost:9001/campsites-c0b4b/us-central1/findCampsites',
-      {
-        params: queryParams,
-      }
-    )
-    console.log(res.data)
+    if (!shallowEqual(state.queryParams, queryParams)) {
+      const res = await axios.get(
+        'http://localhost:9001/campsites-c0b4b/us-central1/findCampsites',
+        {
+          params: queryParams,
+        }
+      )
+      console.log(res.data)
 
-    commit('SET_QUERY_PARAMS', queryParams)
+      commit('SET_QUERY_PARAMS', queryParams)
 
-    Object.values(res.data.campsites).forEach((site) => {
-      const availabilities = {}
-      Object.keys(site.availabilities).forEach((date) => {
-        availabilities[getKeyFromDate(date)] = site.availabilities[date]
+      Object.values(res.data.campsites).forEach((site) => {
+        const availabilities = {}
+        Object.keys(site.availabilities).forEach((date) => {
+          availabilities[getKeyFromDate(date)] = site.availabilities[date]
+        })
+        site.availabilities = availabilities
       })
-      site.availabilities = availabilities
-    })
 
-    commit('SET_CAMPSITES', res.data.campsites)
-    commit('SET_CAMPGROUNDS', res.data.campgrounds)
+      commit('SET_CAMPSITES', res.data.campsites)
+      commit('SET_CAMPGROUNDS', res.data.campgrounds)
+    }
   },
 }
 
