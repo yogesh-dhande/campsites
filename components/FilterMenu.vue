@@ -36,19 +36,22 @@
         class="bg-gray-900 bg-opacity-75 rounded-md px-3 pt-3 pb-4 mt-2"
       >
         <ul>
-          <li v-for="entry in options" :key="entry" class="drawer-list-item">
+          <li
+            v-for="entry in options"
+            :key="entry.value"
+            class="drawer-list-item"
+          >
             <div>
               <input
-                :id="entry"
+                :id="entry.value"
                 v-model="checked"
-                :value="entry"
+                :value="entry.value"
                 type="checkbox"
                 class="m-2"
                 @change="handleInput"
               />
-              <label :for="entry" class="font-medium">{{ entry }}</label>
+              <label :for="entry" class="font-medium">{{ entry.text }}</label>
             </div>
-            <p class="drawer-list-value">{{ entry.value }}</p>
           </li>
         </ul>
       </div>

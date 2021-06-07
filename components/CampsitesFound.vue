@@ -1,5 +1,5 @@
 <template>
-  <card class="bg-indigo-600 bg-opacity-50">
+  <card class="bg-indigo-600 bg-opacity-50 px-3">
     <h2 class="text-white font-bold">
       Found {{ campgrounds.length }} camgrounds.
       {{ availableCampgrounds.length }} of them have a total of

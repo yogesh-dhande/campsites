@@ -9,14 +9,14 @@
       <div class="flex flex-col min-w-min space-y-2">
         <filter-menu
           v-if="campgrounds.length"
-          v-model="selectedCampgroundNames"
+          v-model="selectedCampgrounds"
           title="Campgrounds"
-          :options="campgroundNames"
+          :options="campgroundOptions"
         ></filter-menu>
       </div>
       <div class="flex flex-col space-y-2">
         <campsite
-          v-for="site in availableSites"
+          v-for="site in filteredSites"
           :key="site.campsite_id"
           :campsite="site"
         />
@@ -46,14 +46,24 @@ export default {
   },
   data() {
     return {
-      selectedCampgroundNames: this.campgroundNames,
+      selectedCampgrounds: [],
     }
   },
   computed: {
-    campgroundNames() {
-      return this.availableCampgrounds.map((ground) =>
-        this.toTitleCase(ground.FacilityName)
-      )
+    campgroundOptions() {
+      return this.availableCampgrounds.map((ground) => {
+        return {
+          text: this.toTitleCase(ground.FacilityName),
+          value: ground.FacilityID,
+        }
+      })
+    },
+    filteredSites() {
+      if (this.selectedCampgrounds.length > 0) {
+        return this.availableSites.filter((site) =>
+          this.selectedCampgrounds.includes(site.FacilityID)
+        )
+      } else return this.availableSites
     },
   },
   methods: {
