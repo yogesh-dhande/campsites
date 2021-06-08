@@ -44,14 +44,8 @@ export default {
       default: () => [],
     },
     value: {
-      type: Object,
-      default: () => {
-        return {
-          id: '',
-          value: '',
-          text: '',
-        }
-      },
+      type: String,
+      default: '',
     },
   },
   data() {

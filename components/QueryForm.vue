@@ -113,40 +113,22 @@
         :options="stateOptions"
         label="State"
       ></option-picker>
-
-      <div class="opacity-100">
-        <button
-          type="submit"
-          class="
-            block
-            py-2
-            px-4
-            mx-auto
-            w-full
-            border border-transparent
-            shadow-sm
-            font-bold
-            rounded-md
-            bg-pink-600 bg-opacity-75
-            hover:bg-pink-700
-            focus:outline-none
-            focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500
-          "
-          @click="findCampsites"
-        >
-          Find Campsites
-        </button>
-      </div>
+      <submit
+        label="Find Campsites"
+        :is-loading="isLoading"
+        @click="findCampsites"
+      />
     </div>
   </card>
 </template>
 
 <script>
 import OptionPicker from '@/components/OptionPicker.vue'
+import Submit from '@/components/Submit.vue'
 import { states } from '@/static/data'
 export default {
   name: 'QueryForm',
-  components: { OptionPicker },
+  components: { OptionPicker, Submit },
   data() {
     return {
       query: 'arroyo seco',
@@ -161,6 +143,7 @@ export default {
         }
       }),
       state: 'CA',
+      isLoading: false,
     }
   },
   computed: {
@@ -175,13 +158,20 @@ export default {
     },
   },
   methods: {
-    findCampsites() {
+    async findCampsites() {
       console.log('finding campsites ...')
-      this.$store.dispatch('findCampsites', {
-        query: this.query,
-        dateRange: this.dateRange,
-        state: this.state,
-      })
+      this.isLoading = true
+      try {
+        await this.$store.dispatch('findCampsites', {
+          query: this.query,
+          dateRange: this.dateRange,
+          state: this.state,
+        })
+      } catch (error) {
+        console.log(error)
+      } finally {
+        this.isLoading = false
+      }
     },
     handleStartDateInput(e) {
       if (e.target.value > this.dateRange.endDate) {

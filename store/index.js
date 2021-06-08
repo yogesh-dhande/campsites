@@ -109,6 +109,7 @@ export const actions = {
         })
         site.availabilities = availabilities
       })
+      // eslint-disable-next-line no-unreachable
       commit('SET_CAMPSITES', res.data.campsites)
       commit('SET_CAMPGROUNDS', res.data.campgrounds)
       commit('SET_DATES', dates)
