@@ -1,16 +1,15 @@
 <template>
-  <card class="bg-gray-900 p-3 bg-opacity-25 text-xl text-white font-bold">
+  <card class="bg-gray-900 p-3 bg-opacity-50 text-xl text-white font-bold">
     <div
       class="
         flex flex-col
-        lg:flex-row
-        flex-wrap flex-1
-        space-x-4 space-y-4
-        items-center
+        lg:flex lg:flex-row lg:flex-wrap lg:flex-1
+        lg:space-x-4
+        space-y-4
         lg:items-end
         mx-4
         sm:mx-12
-        justify-center
+        lg:justify-center
       "
     >
       <div>
@@ -52,6 +51,7 @@
             class="
               w-full
               shadow-sm
+              border-none
               focus:ring-indigo-500
               focus:border-indigo-500
               rounded-md
@@ -63,7 +63,7 @@
         </div>
       </div>
       <div
-        class="flex flex-col space-y-2 sm:flex-row sm:spaxe-x-4 sm:space-y-0"
+        class="flex flex-col space-y-2 sm:flex-row sm:space-x-4 sm:space-y-0"
       >
         <div>
           <label for="startDate" class="block p-1">Start</label>
@@ -71,7 +71,16 @@
             id="startDate"
             v-model="dateRange.startDate"
             type="date"
-            class="text-white px-3 rounded-md bg-gray-900 py-2"
+            class="
+              text-white
+              w-full
+              focus:ring-indigo-600
+              px-4
+              rounded-md
+              bg-gray-900
+              py-2
+              border-none
+            "
             :min="minDate"
             :max="maxDate"
             @input="handleStartDateInput"
@@ -84,12 +93,26 @@
             id="endDate"
             v-model="dateRange.endDate"
             type="date"
-            class="text-white px-3 rounded-md bg-gray-900 py-2"
+            class="
+              text-white
+              w-full
+              px-4
+              rounded-md
+              bg-gray-900
+              focus:ring-indigo-600
+              py-2
+              border-none
+            "
             :min="minEndDate"
             :max="maxDate"
           />
         </div>
       </div>
+      <option-picker
+        v-model="state"
+        :options="stateOptions"
+        label="State"
+      ></option-picker>
 
       <div class="opacity-100">
         <button
@@ -119,9 +142,11 @@
 </template>
 
 <script>
+import OptionPicker from '@/components/OptionPicker.vue'
+import { states } from '@/static/data'
 export default {
   name: 'QueryForm',
-  components: {},
+  components: { OptionPicker },
   data() {
     return {
       query: 'arroyo seco',
@@ -129,6 +154,13 @@ export default {
         startDate: '2021-08-09',
         endDate: '2021-08-11',
       },
+      stateOptions: states.map((state) => {
+        return {
+          value: state.abbreviation,
+          text: state.abbreviation,
+        }
+      }),
+      state: 'CA',
     }
   },
   computed: {
@@ -148,6 +180,7 @@ export default {
       this.$store.dispatch('findCampsites', {
         query: this.query,
         dateRange: this.dateRange,
+        state: this.state,
       })
     },
     handleStartDateInput(e) {

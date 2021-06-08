@@ -88,6 +88,7 @@ export const actions = {
     const queryParams = {
       query: payload.query,
       months: getMonthsFromDates(dates),
+      state: payload.state,
     }
 
     if (!shallowEqual(state.queryParams, queryParams)) {

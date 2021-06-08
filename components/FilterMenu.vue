@@ -63,7 +63,7 @@
                 v-model="checked"
                 :value="entry.value"
                 type="checkbox"
-                class="m-2"
+                class="m-2 rounded"
                 @change="handleInput"
               />
               <label :for="entry.value" class="font-medium">{{
@@ -127,13 +127,5 @@ export default {
   opacity: 0;
   transform: translateY(-20px);
   transition: 0.2s all ease;
-}
-
-input[type='checkbox'] {
-  transform: scale(1.5);
-  -ms-transform: scale(1.5);
-  -webkit-transform: scale(1.5);
-  padding: 40px;
-  color: white, black;
 }
 </style>

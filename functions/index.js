@@ -1,6 +1,8 @@
 const functions = require('firebase-functions')
 const axios = require('axios')
-const cors = require('cors')({ origin: 'http://localhost:3000' })
+const cors = require('cors')({
+  origin: ['http://localhost:3000', 'https://campsites-c0b4b.web.app'],
+})
 
 async function getFacilititesFromQuery(query) {
   try {
@@ -10,7 +12,7 @@ async function getFacilititesFromQuery(query) {
         params: {
           offset: 0,
           full: false,
-          query: query,
+          query,
           activity: 'camping',
         },
         headers: {
@@ -56,6 +58,7 @@ async function getSiteAvailabilityAtFacility(facility, months) {
   }
 }
 
+// eslint-disable-next-line no-unused-vars
 async function addCampsiteDetails(campsite) {
   try {
     const response = await axios.get(
@@ -70,17 +73,17 @@ async function addCampsiteDetails(campsite) {
     if (response.data.length > 0) {
       campsite.details = response.data[0]
     }
-  } finally {
-    return null
+  } catch (error) {
+    console.log(error)
   }
 }
 
-exports.findCampsites = functions.https.onRequest(async (req, res) => {
+exports.findCampsites = functions.https.onRequest((req, res) => {
   return cors(req, res, async () => {
     try {
       const facilities = await getFacilititesFromQuery(req.query.query)
 
-      let arrayOfSites = await Promise.all(
+      const arrayOfSites = await Promise.all(
         facilities.map(
           async (facility) =>
             await getSiteAvailabilityAtFacility(facility, req.query.months)
