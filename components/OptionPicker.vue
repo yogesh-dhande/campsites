@@ -6,7 +6,6 @@
       :value="value"
       name="picker"
       class="
-        mt-1
         block
         w-full
         pl-4
