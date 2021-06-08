@@ -94,7 +94,7 @@ exports.findCampsites = functions.https.onRequest((req, res) => {
 
       console.log(sites.length)
 
-      //   await Promise.all(sites.map((site) => addCampsiteDetails(site)))
+      await Promise.all(sites.map((site) => addCampsiteDetails(site)))
 
       res.send({
         campgrounds: facilities,
