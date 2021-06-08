@@ -1,5 +1,5 @@
 <template>
-  <card class="bg-gray-900 text-lg px-3 py-2 bg-opacity-90">
+  <card class="bg-gray-900 text-lg px-3 py-2 bg-opacity-90 shadow-lg mx-4">
     <div class="flex justify-between items-center space-x-2">
       <div class="flex flex-col">
         <h2 class="font-bold">{{ toTitleCase(campsite.FacilityName) }}</h2>
@@ -25,6 +25,12 @@
         >View Details</a
       >
     </div>
+    <img
+      v-if="image"
+      :src="image.URL"
+      alt="image.Title"
+      class="rounded-lg my-4 w-96 mx-auto"
+    />
   </card>
 </template>
 
@@ -40,6 +46,14 @@ export default {
     campsite: {
       type: Object,
       default: () => {},
+    },
+  },
+  computed: {
+    image() {
+      if (this.campsite.details.ENTITYMEDIA.length > 0) {
+        return this.campsite.details.ENTITYMEDIA[0]
+      }
+      return null
     },
   },
   methods: {
