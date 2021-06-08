@@ -4,7 +4,7 @@ const cors = require('cors')({
   origin: ['http://localhost:3000', 'https://campsites-c0b4b.web.app'],
 })
 
-async function getFacilititesFromQuery(query) {
+async function getFacilititesFromQueryParams(queryParams) {
   try {
     const response = await axios.get(
       'https://ridb.recreation.gov/api/v1/facilities',
@@ -12,7 +12,8 @@ async function getFacilititesFromQuery(query) {
         params: {
           offset: 0,
           full: false,
-          query,
+          query: queryParams.query,
+          state: queryParams.state,
           activity: 'camping',
         },
         headers: {
@@ -81,7 +82,7 @@ async function addCampsiteDetails(campsite) {
 exports.findCampsites = functions.https.onRequest((req, res) => {
   return cors(req, res, async () => {
     try {
-      const facilities = await getFacilititesFromQuery(req.query.query)
+      const facilities = await getFacilititesFromQueryParams(req.query)
 
       const arrayOfSites = await Promise.all(
         facilities.map(
