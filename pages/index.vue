@@ -4,7 +4,7 @@
       <div class="relative px-4 pt-16 pb-8 sm:pb-12 sm:px-6 lg:px-8">
         <h1
           class="
-            text-center text-4xl
+            text-center text-3xl
             font-extrabold
             sm:text-6xl
             lg:text-7xl

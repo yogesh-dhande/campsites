@@ -7,7 +7,7 @@
       bg-opacity-50
       text-xl text-white
       font-bold
-      w-3/4
+      w-full
       sm:w-auto
     "
   >
