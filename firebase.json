@@ -18,7 +18,8 @@
   },
   "emulators": {
     "functions": {
-      "port": 9001
+      "port": 9001,
+      "host": "0.0.0.0"
     },
     "firestore": {
       "port": 9002

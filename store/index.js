@@ -93,7 +93,7 @@ export const actions = {
 
     if (!shallowEqual(state.queryParams, queryParams)) {
       const res = await axios.get(
-        'http://localhost:9001/campsites-c0b4b/us-central1/findCampsites',
+        `${process.env.NUXT_ENV_FIREBASE_FUNCTION_BASE_URL}findCampsites`,
         {
           params: queryParams,
         }

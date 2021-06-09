@@ -114,7 +114,7 @@
         label="State"
       ></option-picker>
       <submit
-        label="Find Campsites"
+        label="Search Campsites"
         :is-loading="isLoading"
         @click="findCampsites"
       />
@@ -130,11 +130,16 @@ export default {
   name: 'QueryForm',
   components: { OptionPicker, Submit },
   data() {
+    const today = new Date()
+    const inTwoDays = new Date()
+    inTwoDays.setDate(inTwoDays.getDate() + 2)
+
     return {
+      today,
       query: 'arroyo seco',
       dateRange: {
-        startDate: '2021-08-09',
-        endDate: '2021-08-11',
+        startDate: this.dateToString(today),
+        endDate: this.dateToString(inTwoDays),
       },
       stateOptions: states.map((state) => {
         return {
@@ -148,10 +153,12 @@ export default {
   },
   computed: {
     minDate() {
-      return new Date()
+      return this.dateToString(this.today)
     },
     maxDate() {
-      return new Date(this.minDate.getFullYear() + 1, this.minDate.getMonth())
+      return this.dateToString(
+        new Date(this.today.getFullYear() + 1, this.today.getMonth())
+      )
     },
     minEndDate() {
       return this.dateRange.startDate
@@ -177,6 +184,9 @@ export default {
       if (e.target.value > this.dateRange.endDate) {
         this.dateRange.endDate = e.target.value
       }
+    },
+    dateToString(date) {
+      return date.toISOString().split('T')[0]
     },
   },
 }

@@ -1,7 +1,12 @@
 const functions = require('firebase-functions')
 const axios = require('axios')
 const cors = require('cors')({
-  origin: ['http://localhost:3000', 'https://campsites-c0b4b.web.app'],
+  origin: [
+    'http://192.168.50.117:3000',
+    'http://localhost:3000',
+    'https://campsites-c0b4b.web.app',
+    'https://finderscampers.com',
+  ],
 })
 
 async function getFacilititesFromQueryParams(queryParams) {
