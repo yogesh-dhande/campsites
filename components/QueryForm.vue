@@ -1,6 +1,15 @@
 <template>
   <card
-    class="bg-gray-900 pt-3 pb-6 bg-opacity-50 text-xl text-white font-bold"
+    class="
+      bg-gray-900
+      pt-3
+      pb-6
+      bg-opacity-50
+      text-xl text-white
+      font-bold
+      w-3/4
+      sm:w-auto
+    "
   >
     <div
       class="

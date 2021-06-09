@@ -1,6 +1,6 @@
 <template>
-  <div class="rounded sm:rounded-lg">
-    <div class="px-2 py-2 sm:px-6">
+  <div class="rounded-md sm:rounded-lg">
+    <div class="py-2 px-6">
       <slot></slot>
     </div>
   </div>

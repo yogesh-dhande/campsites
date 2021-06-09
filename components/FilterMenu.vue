@@ -11,7 +11,7 @@
       "
       :class="
         showDrawer
-          ? 'bg-pink-600 hover:bg-pink-700'
+          ? 'bg-gray-800 hover:bg-pink-900'
           : 'bg-gray-900 hover:bg-gray-800'
       "
       @click="show"

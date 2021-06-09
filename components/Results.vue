@@ -1,5 +1,5 @@
 <template>
-  <div>
+  <div class="max-w-sm lg:max-w-none">
     <campsites-found
       v-if="dates.length > 0"
       :available-sites="availableSites"
@@ -8,7 +8,14 @@
     />
     <div
       v-if="campgrounds.length"
-      class="flex flex-col space-y-2 lg:flex-row lg:space-x-4 lg:space-y-0 mt-6"
+      class="
+        flex flex-col
+        space-y-2
+        lg:flex-row
+        lg:space-x-4 lg:space-y-0
+        mt-6
+        justify-center
+      "
     >
       <div class="flex flex-col space-y-2">
         <div
@@ -20,7 +27,7 @@
             font-bold
             px-6
             py-2
-            bg-gray-900 bg-opacity-75
+            bg-pink-600
             rounded-md
           "
         >
