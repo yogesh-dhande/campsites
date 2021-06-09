@@ -1,5 +1,7 @@
 <template>
-  <card class="bg-gray-900 p-3 bg-opacity-50 text-xl text-white font-bold">
+  <card
+    class="bg-gray-900 pt-3 pb-6 bg-opacity-50 text-xl text-white font-bold"
+  >
     <div
       class="
         flex flex-col
@@ -131,15 +133,17 @@ export default {
   components: { OptionPicker, Submit },
   data() {
     const today = new Date()
-    const inTwoDays = new Date()
-    inTwoDays.setDate(inTwoDays.getDate() + 2)
+    const startDate = new Date()
+    startDate.setDate(startDate.getDate() + 60)
+    const endDate = new Date()
+    endDate.setDate(endDate.getDate() + 62)
 
     return {
       today,
       query: 'arroyo seco',
       dateRange: {
-        startDate: this.dateToString(today),
-        endDate: this.dateToString(inTwoDays),
+        startDate: this.dateToString(startDate),
+        endDate: this.dateToString(endDate),
       },
       stateOptions: states.map((state) => {
         return {

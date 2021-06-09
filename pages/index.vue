@@ -1,7 +1,7 @@
 <template>
   <div class="text-indigo-100">
     <div class="flex flex-col h-screen items-center">
-      <div class="relative px-4 pt-16 pb-4 sm:pb-8 sm:px-6 lg:px-8">
+      <div class="relative px-4 pt-16 pb-8 sm:pb-12 sm:px-6 lg:px-8">
         <h1
           class="
             text-center text-4xl
@@ -18,7 +18,6 @@
         </h1>
       </div>
       <query-form></query-form>
-
       <results
         class="mx-6 sm:mx-12 mt-6"
         :available-sites="availableSites"
