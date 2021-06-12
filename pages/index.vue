@@ -22,8 +22,9 @@
         class="mx-6 sm:mx-12 mt-6"
         :available-sites="availableSites"
         :available-campgrounds="availableCampgrounds"
-        :campgrounds="campgrounds"
+        :campgrounds="campgroundNames"
         :dates="dates"
+        :error="error"
       />
     </div>
   </div>
@@ -35,13 +36,12 @@ import Results from '~/components/Results.vue'
 export default {
   components: { Results },
   computed: {
-    ...mapState(['campgrounds', 'dates']),
-    ...mapGetters(['availableSites', 'availableCampgrounds']),
-    campgrounds() {
-      return this.availableCampgrounds.map((ground) =>
-        this.toTitleCase(ground.FacilityName)
-      )
-    },
+    ...mapState(['dates', 'error']),
+    ...mapGetters([
+      'availableSites',
+      'availableCampgrounds',
+      'campgroundNames',
+    ]),
   },
   methods: {
     toTitleCase(str) {

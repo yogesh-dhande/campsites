@@ -47,34 +47,36 @@ function shallowEqual(object1, object2) {
 }
 
 function isSiteAvailableOnDates(site, dates) {
-  const available = dates
+  return dates
     .map((date) => site.availabilities[getKeyFromDate(date)] === 'Available')
     .every(Boolean)
-
-  console.log(available)
-  return available
 }
 
 export const state = () => ({
   queryParams: {},
   dates: [],
-  campsites: [],
-  campgrounds: [],
+  campsites: {}, // Object because sometimes the API returns duplicate sites and campgrounds
+  campgrounds: {},
+  error: null,
 })
 
 export const getters = {
   availableSites(state) {
-    return state.campsites.filter((site) =>
-      isSiteAvailableOnDates(site, state.dates)
+    return Object.values(state.campsites).filter(
+      (site) =>
+        (site.details !== undefined) & isSiteAvailableOnDates(site, state.dates)
     )
   },
   availableCampgrounds(state, getters) {
     const availableFacilityIDs = getters.availableSites.map(
       (site) => site.FacilityID
     )
-    return state.campgrounds.filter((campground) =>
+    return Object.values(state.campgrounds).filter((campground) =>
       availableFacilityIDs.includes(campground.FacilityID)
     )
+  },
+  campgroundNames(state) {
+    return Object.values(state.campgrounds).map((ground) => ground.FacilityName)
   },
 }
 
@@ -85,39 +87,67 @@ export const actions = {
       payload.dateRange.endDate
     )
 
-    const queryParams = {
+    const cachedParams = {
       query: payload.query,
       months: getMonthsFromDates(dates),
       state: payload.state,
     }
 
-    if (!shallowEqual(state.queryParams, queryParams)) {
-      const res = await axios.get(
-        `${process.env.NUXT_ENV_FIREBASE_FUNCTION_BASE_URL}/findCampsites`,
-        {
-          params: queryParams,
+    if (!shallowEqual(state.queryParams, cachedParams)) {
+      commit('SET_CAMPSITES', {})
+      commit('SET_ERROR', null)
+      commit('SET_CAMPGROUNDS', {})
+      let currentCount = 0
+      let totalCount = 11
+      const limit = 10
+      let offset = 0
+
+      try {
+        while (offset + limit < totalCount) {
+          const queryParams = {
+            ...cachedParams,
+            limit,
+            offset,
+          }
+          const res = await axios.get(
+            `${process.env.NUXT_ENV_FIREBASE_FUNCTION_BASE_URL}/findCampsites`,
+            {
+              params: queryParams,
+            }
+          )
+
+          currentCount = res.data.metadata.RESULTS.CURRENT_COUNT
+          totalCount = res.data.metadata.RESULTS.TOTAL_COUNT
+
+          offset = offset + currentCount
+          commit('SET_QUERY_PARAMS', cachedParams)
+
+          Object.values(res.data.campsites).forEach((site) => {
+            const availabilities = {}
+            Object.keys(site.availabilities).forEach((date) => {
+              availabilities[getKeyFromDate(date)] = site.availabilities[date]
+            })
+            site.availabilities = availabilities
+          })
+
+          // eslint-disable-next-line no-unreachable
+          commit('ADD_CAMPGROUNDS', res.data.campgrounds)
+          commit('ADD_CAMPSITES', res.data.campsites)
         }
-      )
-      console.log(res.data)
+      } catch (error) {
+        console.log(error)
+        commit('SET_ERROR', error.message)
+      }
 
-      commit('SET_QUERY_PARAMS', queryParams)
-
-      Object.values(res.data.campsites).forEach((site) => {
-        const availabilities = {}
-        Object.keys(site.availabilities).forEach((date) => {
-          availabilities[getKeyFromDate(date)] = site.availabilities[date]
-        })
-        site.availabilities = availabilities
-      })
-      // eslint-disable-next-line no-unreachable
-      commit('SET_CAMPSITES', res.data.campsites)
-      commit('SET_CAMPGROUNDS', res.data.campgrounds)
       commit('SET_DATES', dates)
     }
   },
 }
 
 export const mutations = {
+  SET_ERROR(state, error) {
+    state.error = error
+  },
   SET_QUERY_PARAMS(state, query) {
     state.queryParams = query
   },
@@ -129,5 +159,11 @@ export const mutations = {
   },
   SET_CAMPGROUNDS(state, campgrounds) {
     state.campgrounds = campgrounds
+  },
+  ADD_CAMPSITES(state, campsites) {
+    state.campsites = Object.assign({}, state.campsites, campsites)
+  },
+  ADD_CAMPGROUNDS(state, campgrounds) {
+    state.campgrounds = Object.assign({}, state.campgrounds, campgrounds)
   },
 }

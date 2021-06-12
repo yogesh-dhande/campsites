@@ -5,6 +5,7 @@
       :available-sites="availableSites"
       :available-campgrounds="availableCampgrounds"
       :campgrounds="campgrounds"
+      :error="error"
     />
     <div
       v-if="campgrounds.length"
@@ -109,6 +110,10 @@ export default {
     dates: {
       type: Array,
       default: () => [],
+    },
+    error: {
+      type: String,
+      default: null,
     },
   },
   data() {

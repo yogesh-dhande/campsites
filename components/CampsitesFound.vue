@@ -1,9 +1,12 @@
 <template>
   <card class="bg-indigo-600 bg-opacity-50 px-3">
     <h2 class="text-white font-bold">
-      Found {{ campgrounds.length }} camgrounds, of which
-      {{ availableCampgrounds.length }} have a total of
-      {{ availableSites.length }} camp sites available on selected dates.
+      <span v-if="error">{{ error }}</span>
+      <span v-else>
+        Found {{ campgrounds.length }} camgrounds, of which
+        {{ availableCampgrounds.length }} have a total of
+        {{ availableSites.length }} camp sites available on selected dates.
+      </span>
     </h2>
   </card>
 </template>
@@ -26,6 +29,10 @@ export default {
     campgrounds: {
       type: Array,
       default: () => [],
+    },
+    error: {
+      type: String,
+      default: null,
     },
   },
 }
