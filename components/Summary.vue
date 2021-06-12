@@ -16,7 +16,8 @@
             {{ availableCampgrounds.length }}
             <span v-if="availableCampgrounds.length === 1">has</span>
             <span v-else>have</span> a total of {{ availableSites.length }} camp
-            sites available on selected dates.
+            <span v-if="availableSites.length === 1">site</span
+            ><span v-else>sites</span> available on selected dates.
           </span>
           <span v-else
             >but no camp sites are available on selected dates. Try selecting
