@@ -58,6 +58,7 @@ export const state = () => ({
   campsites: {}, // Object because sometimes the API returns duplicate sites and campgrounds
   campgrounds: {},
   error: null,
+  isLoading: false,
 })
 
 export const getters = {
@@ -138,13 +139,15 @@ export const actions = {
         console.log(error)
         commit('SET_ERROR', error.message)
       }
-
       commit('SET_DATES', dates)
     }
   },
 }
 
 export const mutations = {
+  SET_LOADING(state, isLoading) {
+    state.isLoading = isLoading
+  },
   SET_ERROR(state, error) {
     state.error = error
   },

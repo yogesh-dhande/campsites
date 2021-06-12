@@ -25,6 +25,7 @@
         :campgrounds="campgroundNames"
         :dates="dates"
         :error="error"
+        :is-loading="isLoading"
       />
     </div>
   </div>
@@ -36,7 +37,7 @@ import Results from '~/components/Results.vue'
 export default {
   components: { Results },
   computed: {
-    ...mapState(['dates', 'error']),
+    ...mapState(['dates', 'error', 'isLoading']),
     ...mapGetters([
       'availableSites',
       'availableCampgrounds',

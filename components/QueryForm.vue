@@ -181,6 +181,7 @@ export default {
     async findCampsites() {
       console.log('finding campsites ...')
       this.isLoading = true
+      this.$store.commit('SET_LOADING', true)
       try {
         await this.$store.dispatch('findCampsites', {
           query: this.query,
@@ -191,6 +192,7 @@ export default {
         console.log(error)
       } finally {
         this.isLoading = false
+        this.$store.commit('SET_LOADING', false)
       }
     },
     handleStartDateInput(e) {

@@ -1,14 +1,14 @@
 <template>
   <div class="max-w-sm lg:max-w-none">
-    <campsites-found
-      v-if="dates.length > 0"
+    <Summary
+      v-if="(dates.length > 0) & !isLoading"
       :available-sites="availableSites"
       :available-campgrounds="availableCampgrounds"
       :campgrounds="campgrounds"
       :error="error"
     />
     <div
-      v-if="campgrounds.length"
+      v-if="availableSites.length"
       class="
         flex flex-col
         space-y-2
@@ -90,10 +90,10 @@
 </template>
 
 <script>
-import CampsitesFound from '~/components/CampsitesFound.vue'
+import Summary from '@/components/Summary.vue'
 
 export default {
-  components: { CampsitesFound },
+  components: { Summary },
   props: {
     availableSites: {
       type: Array,
@@ -114,6 +114,10 @@ export default {
     error: {
       type: String,
       default: null,
+    },
+    isLoading: {
+      type: Boolean,
+      default: false,
     },
   },
   data() {

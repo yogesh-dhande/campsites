@@ -1,6 +1,5 @@
 const functions = require('firebase-functions')
 const axios = require('axios')
-const { HttpsError } = require('firebase-functions/lib/providers/https')
 const cors = require('cors')({
   origin: [
     'http://192.168.50.117:3000',
@@ -37,28 +36,26 @@ async function getFacilititesFromQueryParams(queryParams) {
 }
 
 async function getSiteAvailabilityAtFacilityForMonth(facility, month) {
-  let status = 429
   let response = {
     data: {
       campsites: {},
     },
+    status: 429,
   }
   const request = async () => {
     try {
       response = await axios.get(
         `https://www.recreation.gov/api/camps/availability/campground/${facility.FacilityID}/month?start_date=${month}T00%3A00%3A00.000Z`
       )
-      status = response.status
     } catch (error) {
       if (error.response) {
-        status = error.response.status
-        console.log(status)
+        response.status = error.response.status
       }
     }
   }
 
   await request()
-  while (status === 429) {
+  while (response.status === 429) {
     setTimeout(request, 1000)
   }
 
