@@ -17,7 +17,39 @@ export default {
     meta: [
       { charset: 'utf-8' },
       { name: 'viewport', content: 'width=device-width, initial-scale=1' },
-      { hid: 'description', name: 'description', content: '' },
+      {
+        hid: 'description',
+        name: 'description',
+        content: 'Search campsites by availability on selected dates',
+      },
+      { hid: 'og:title', property: 'og:title', content: 'Finders Campers' },
+      {
+        hid: 'og:description',
+        property: 'og:description',
+        content: 'Search campsites by availability on selected dates',
+      },
+      {
+        hid: 'og:url',
+        property: 'og:url',
+        content: 'https://finderscampers.com',
+      },
+      {
+        hid: 'og:image',
+        property: 'og:image',
+        content:
+          'https://images.unsplash.com/photo-1517823382935-51bfcb0ec6bc?ixlib=rb-1.2.1&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=2850&q=80',
+      },
+      {
+        hid: 'twitter:card',
+        property: 'twitter:card',
+        content: 'summary_large_image',
+      },
+      {
+        hid: 'twitter:image',
+        property: 'twitter:image',
+        content:
+          'https://images.unsplash.com/photo-1517823382935-51bfcb0ec6bc?ixlib=rb-1.2.1&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=2850&q=80',
+      },
     ],
     link: [
       {
