@@ -153,7 +153,11 @@ export default {
       return [
         ...this.availableSites.reduce((accumulator, site) => {
           site.details.PERMITTEDEQUIPMENT.forEach((eq) =>
-            accumulator.add(eq.EquipmentName)
+            accumulator.add(
+              eq.EquipmentName === 'RV'
+                ? eq.EquipmentName
+                : this.toTitleCase(eq.EquipmentName)
+            )
           )
           return accumulator
         }, new Set()),

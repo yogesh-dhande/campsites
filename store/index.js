@@ -111,7 +111,7 @@ export const actions = {
             offset,
           }
           const res = await axios.get(
-            `${process.env.NUXT_ENV_FIREBASE_FUNCTION_BASE_URL}/findCampsites`,
+            `${process.env.functionsUrl}/findCampsites`,
             {
               params: queryParams,
             }

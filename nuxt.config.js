@@ -1,3 +1,5 @@
+const isDev = process.env.NODE_ENV === 'development'
+
 export default {
   server: {
     host: '0', // default: localhost
@@ -7,6 +9,11 @@ export default {
 
   // Target: https://go.nuxtjs.dev/config-target
   target: 'static',
+  env: {
+    functionsUrl: isDev
+      ? 'http://localhost:9001/campsites-c0b4b/us-central1'
+      : process.env.NUXT_ENV_FIREBASE_FUNCTION_BASE_URL,
+  },
 
   // Global page headers: https://go.nuxtjs.dev/config-head
   head: {
@@ -64,7 +71,7 @@ export default {
   css: [],
 
   // Plugins to run before rendering page: https://go.nuxtjs.dev/config-plugins
-  plugins: [],
+  plugins: ['~/plugins/analytics.client.js'],
 
   // Auto import components: https://go.nuxtjs.dev/config-components
   components: true,

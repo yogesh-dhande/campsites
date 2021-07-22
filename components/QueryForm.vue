@@ -160,7 +160,7 @@ export default {
           text: state.abbreviation,
         }
       }),
-      state: 'CA',
+      state: null,
       isLoading: false,
     }
   },
@@ -179,15 +179,16 @@ export default {
   },
   methods: {
     async findCampsites() {
-      console.log('finding campsites ...')
+      const data = {
+        query: this.query,
+        dateRange: this.dateRange,
+        state: this.state,
+      }
       this.isLoading = true
       this.$store.commit('SET_LOADING', true)
       try {
-        await this.$store.dispatch('findCampsites', {
-          query: this.query,
-          dateRange: this.dateRange,
-          state: this.state,
-        })
+        this.$splitbee.track('findCampsites', data)
+        await this.$store.dispatch('findCampsites', data)
       } catch (error) {
         console.log(error)
       } finally {

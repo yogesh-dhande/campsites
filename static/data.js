@@ -1,5 +1,9 @@
 export const states = [
   {
+    name: '',
+    abbreviation: null,
+  },
+  {
     name: 'Alabama',
     abbreviation: 'AL',
   },
